@@ -6,9 +6,17 @@ from django.db.models import Sum
 
 
 class SponsorshipSerializer(serializers.ModelSerializer):
+    linkdetail=serializers.SerializerMethodField()
+
     class Meta:
         model = Sponsorship
-        fields = ['sponsor', 'amount']
+        fields = ['sponsor', 'amount', 'linkdetail']
+
+    def get_linkdetail(self, obj):
+        request = self.context.get('request')
+        if request:
+            return request.build_absolute_uri(f"/api/sponsorship/{obj.id}/")
+        return f"/api/sponsorship/{obj.id}/"
 
     def validate(self, data):
         sponsor = data['sponsor']
