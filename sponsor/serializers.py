@@ -5,10 +5,17 @@ from django.db.models import Sum
 
 class SponsorSerializer(serializers.ModelSerializer):
     amount_spent = serializers.SerializerMethodField()
+    linkdetail=serializers.SerializerMethodField()
     class Meta:
         model = Sponsor
-        fields = ['full_name', 'phone', 'status', 'sponsor_type', 'sponsorship', 'amount_spent', 'company_name', 'date']
+        fields = ['full_name', 'phone', 'status', 'sponsor_type', 'sponsorship', 'amount_spent', 'company_name', 'date', 'linkdetail']
         read_only_fields=['status','date']
+
+    def get_linkdetail(self, obj):
+        request = self.context.get('request')
+        if request:
+            return request.build_absolute_uri(f"/api/sponsor/{obj.id}/")
+        return f"/api/sponsor/{obj.id}/"
 
     def get_amount_spent(self, obj):
         total_spent = Sponsorship.objects.filter(sponsor=obj).aggregate(Sum('amount'))['amount__sum']

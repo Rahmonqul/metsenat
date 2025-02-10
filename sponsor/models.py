@@ -27,6 +27,7 @@ class Sponsor(models.Model):
     status = models.CharField(max_length=100, choices=STATUS, default='Yangi', db_index=True, verbose_name='Статус')
     type_payment=models.CharField(max_length=100, choices=type_payment_choice, default='Pul o`tkazmalari', verbose_name='Тип перевода')
     company_name = models.CharField(max_length=255, blank=True, null=True, verbose_name='Название компании')
+    # linkdetail=models.URLField(blank=True, null=True, verbose_name='Подробнее')
 
     class Meta:
         indexes = [
